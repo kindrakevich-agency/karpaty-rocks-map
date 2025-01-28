@@ -10,6 +10,7 @@ import { BLUE, RED, YELLOW, GREEN } from '@/constants/colors';
 import { MAX_CITY_ZOOM } from '@/components/Map/constants';
 import { Pin, Trail } from '@/api/data';
 import { getTrailLength, getCategoryName } from '@/utils/helpers';
+import { useShallow } from 'zustand/react/shallow';
 import './style.css';
 
 export const SearchBox = () => {
@@ -21,6 +22,9 @@ export const SearchBox = () => {
   const setActivePin = usePinStore((state) => state.setActivePin);
   const setActiveTrail = usePinStore((state) => state.setActiveTrail);
   const [searchValue, setSearchValue] = useState('');
+  const { drawerSnapPoint, setDrawerSnapPoint } = useMapStore(
+    useShallow((state) => ({ drawerSnapPoint: state.drawerSnapPoint, setDrawerSnapPoint: state.setDrawerSnapPoint }))
+  );
   useEffect(() => {
     if (searchValue.length > 3) {
       setSearchResults(searchValue);
@@ -36,6 +40,7 @@ export const SearchBox = () => {
             placeholder="Введіть текст для пошуку..."
             className="combobox focus-visible:outline-none text-base"
             onChange={(e) => setSearchValue(e.target.value)}
+            onFocus={(e) => setDrawerSnapPoint('40px')}
           />
           <Button type="button" className="button secondary escape" onClick={() => setSearchOpen(false)}>
             <FaXmark />
