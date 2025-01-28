@@ -21,10 +21,11 @@ import {
 } from 'react-leaflet';
 import { Controls } from './Controls';
 import { DEFAULT_ZOOM, MIN_PIN_ZOOM } from './constants';
-import { BLUE, RED, YELLOW, GREEN } from '@/constants/colors';
+import { BLUE, RED, YELLOW, GREEN, BLACK } from '@/constants/colors';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { MAX_ZOOM } from './constants';
+import { Pin, Trail } from '@/api/data';
 
 const markerDivIcon = (color: string) =>
   L.divIcon({
@@ -114,6 +115,34 @@ const Map = () => {
     color: RED
   };
 
+  const pathOptionsHover = {
+    weight: 3,
+    color: '#FFFFFF'
+  };
+
+  const getPathOptions = (trail: Trail) => {
+    let pathOptions = {
+      weight: 3,
+      color: RED
+    };
+    if (trail.trail_color == '#0000FF') {
+      pathOptions.color = BLUE;
+    }
+    if (trail.trail_color == '#008000') {
+      pathOptions.color = GREEN;
+    }
+    if (trail.trail_color == '#FF0000') {
+      pathOptions.color = RED;
+    }
+    if (trail.trail_color == '#FFFF00') {
+      pathOptions.color = YELLOW;
+    }
+    if (trail.trail_color == '#000000') {
+      pathOptions.color = BLACK;
+    }
+    return pathOptions;
+  };
+
   //const LATLNG = [48.470791, 24.579491]; // Yaremche
   const DEFAULT_MAP_CENTER: LatLngTuple = [48.2929828, 24.5635786];
 
@@ -199,22 +228,17 @@ const Map = () => {
           <Polyline
             ref={(p) => setTrailMarker(p as LPolyline)}
             key={activeTrail.id}
-            pathOptions={pathOptions}
+            pathOptions={getPathOptions(activeTrail)}
             positions={activeTrail.location}
             eventHandlers={{
               mouseover: (e) => {
                 var layer = e.target;
-                layer.setStyle({
-                  weight: 3,
-                  color: '#FFFFFF'
-                });
+                layer.setStyle(pathOptionsHover);
               },
               mouseout: (e) => {
                 var layer = e.target;
-                layer.setStyle({
-                  weight: 3,
-                  color: RED
-                });
+                const pathOptions = getPathOptions(activeTrail);
+                layer.setStyle(pathOptions);
               }
             }}
           >
@@ -251,22 +275,17 @@ const Map = () => {
             return (
               <Polyline
                 key={trail.id}
-                pathOptions={pathOptions}
+                pathOptions={getPathOptions(trail)}
                 positions={trail.location}
                 eventHandlers={{
                   mouseover: (e) => {
                     var layer = e.target;
-                    layer.setStyle({
-                      weight: 3,
-                      color: '#FFFFFF'
-                    });
+                    layer.setStyle(pathOptionsHover);
                   },
                   mouseout: (e) => {
                     var layer = e.target;
-                    layer.setStyle({
-                      weight: 3,
-                      color: RED
-                    });
+                    const pathOptions = getPathOptions(trail);
+                    layer.setStyle(pathOptions);
                   },
                   click: (e) => {
                     removeActivePin(null);

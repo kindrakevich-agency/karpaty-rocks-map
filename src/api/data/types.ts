@@ -29,6 +29,7 @@ export interface Trail {
   image: string;
   url: string;
   location: LatLngBoundsLiteral;
+  trail_color: string | null;
   trail_ascent: number;
   trail_descent: number;
   trail_length: number;
