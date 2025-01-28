@@ -1,9 +1,10 @@
 import { Pin, Trail } from '@/api/data';
 import { usePinStore } from '@/stores/pins';
-import { useMapStore } from '@/stores/map';
+import { DrawerSnapPoint, useMapStore } from '@/stores/map';
 import { BLUE, RED, YELLOW, GREEN } from '@/constants/colors';
 import Image from 'next/image';
 import { getItemColor } from '@/utils/helpers';
+import { useShallow } from 'zustand/react/shallow';
 
 export const List = () => {
   const pins = usePinStore((state) => state.pins);
@@ -12,15 +13,30 @@ export const List = () => {
   const setActiveTrail = usePinStore((state) => state.setActiveTrail);
   const removeActivePin = usePinStore((state) => state.removeActivePin);
   const removeActiveTrail = usePinStore((state) => state.removeActiveTrail);
+  const location = usePinStore((state) => state.location);
+
+  const { drawerSnapPoint, setDrawerSnapPoint } = useMapStore(
+    useShallow((state) => ({ drawerSnapPoint: state.drawerSnapPoint, setDrawerSnapPoint: state.setDrawerSnapPoint }))
+  );
+
+  const snapPoint = () => {
+    let point = '40px';
+    if (pins.length && location) {
+      point = '105px';
+    }
+    return point as DrawerSnapPoint;
+  };
 
   const onClickPin = (pin: Pin) => {
     removeActiveTrail(null);
     setActivePin(pin);
+    setDrawerSnapPoint(snapPoint());
   };
 
   const onClickTrail = (trail: Trail) => {
     removeActivePin(null);
     setActiveTrail(trail);
+    setDrawerSnapPoint(snapPoint());
   };
 
   return (
