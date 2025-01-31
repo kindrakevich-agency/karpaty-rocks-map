@@ -7,6 +7,7 @@ export type Filter = {
 export interface Pin {
   id: number;
   name: string;
+  body: string;
   category: string;
   subcategory: string;
   image: string;

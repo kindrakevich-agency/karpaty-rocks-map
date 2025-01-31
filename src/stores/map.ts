@@ -2,7 +2,8 @@ import { Map, Marker, Polyline } from 'leaflet';
 import { create } from 'zustand';
 import { mapTiles } from '@/components/Map/constants';
 import { MapTile } from '@/api/data';
-export type DrawerSnapPoint = '40px' | '105px' | 1;
+
+export type DrawerSnapPoint = '40px' | '105px' | '205px' | 1;
 
 interface MapState {
   map: Map | null;

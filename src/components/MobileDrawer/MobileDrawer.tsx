@@ -20,7 +20,7 @@ export const MobileDrawer = () => {
   return (
     <Drawer
       open={isMobile}
-      snapPoints={pins.length && location ? ['40px', '105px', 1] : ['40px']}
+      snapPoints={pins.length && location ? ['40px', '105px', '205px', 1] : ['40px']}
       activeSnapPoint={pins.length && location ? drawerSnapPoint : '40px'}
       setActiveSnapPoint={(point) => setDrawerSnapPoint(point as DrawerSnapPoint)}
       dismissible={false}
