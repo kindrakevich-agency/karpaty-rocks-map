@@ -1,4 +1,4 @@
-import { Locate } from 'lucide-react';
+import { FaLocationCrosshairs } from 'react-icons/fa6';
 
 import { Button } from '@/components/ui/button';
 import { useMapStore } from '@/stores/map';
@@ -10,7 +10,7 @@ export const LocateControl = () => {
 
   return (
     <Button size="icon" variant="outline" onClick={onClick}>
-      <Locate className="h-4 w-4" />
+      <FaLocationCrosshairs className="h-4 w-4" />
     </Button>
   );
 };

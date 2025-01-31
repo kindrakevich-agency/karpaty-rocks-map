@@ -37,6 +37,7 @@ const markerDivIcon = (color: string) =>
 const Map = () => {
   const { theme } = useTheme();
   const map = useMapStore((state) => state.map);
+  const currentTile = useMapStore((state) => state.tile);
   const setMap = useMapStore((state) => state.setMap);
   const pins = usePinStore((state) => state.pins);
   const trails = usePinStore((state) => state.trails);
@@ -158,8 +159,8 @@ const Map = () => {
         style={{ zIndex: 40 }}
       >
         <TileLayer
-          attribution='© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url={`https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`}
+          attribution={currentTile?.attribution}
+          url={currentTile?.url || 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}
         />
 
         {activePin && (

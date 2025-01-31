@@ -58,3 +58,12 @@ export type Location = {
   title: string | null;
   subtitle: string | null;
 };
+
+export type MapTile = {
+  name: string;
+  title: string;
+  url: string;
+  attribution: string;
+};
+
+export type MapTiles = MapTile[];

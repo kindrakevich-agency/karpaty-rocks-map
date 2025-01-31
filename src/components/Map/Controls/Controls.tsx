@@ -27,7 +27,7 @@ export const Controls = () => {
           )}
         </div>
         <div className="flex space-x-3 xl:space-x-4">
-          <Button type="button" className="pointer-events-auto button text-sm" onClick={() => setSearchOpen(true)}>
+          <Button variant="outline" className="pointer-events-auto text-sm" onClick={() => setSearchOpen(true)}>
             Пошук
           </Button>
           <Filters />
