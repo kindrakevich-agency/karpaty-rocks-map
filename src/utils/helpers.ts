@@ -1,8 +1,11 @@
 import { Pin } from '@/api/data';
-
 import { BLUE, RED, YELLOW, GREEN } from '@/constants/colors';
 
 export const getItemColor = (pin: Pin) => {
+  switch (pin.subcategory) {
+    case 'Вершини':
+      return RED;
+  }
   switch (pin.category) {
     case 'Проживання':
       return BLUE;
