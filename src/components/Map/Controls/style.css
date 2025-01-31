@@ -181,6 +181,9 @@
     border-color: hsl(var(--input));
     border-width: 1px;
 }
+.light .button:hover {
+    background-color: hsl(var(--accent));
+}
 
 .list {
     overflow-y: auto;
