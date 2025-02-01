@@ -159,7 +159,7 @@ export const List = () => {
         </div>
       )}
       <div key={`listWrapper`} className="space-y-7">
-        {(activePin || activeTrail) && pins.length > 1 && (
+        {(activePin || activeTrail) && (pins.length > 1 || trails.length > 1) && (
           <p key={`listTitle`} className="pl-4 text-left text-2xl">
             Навколо:
           </p>
