@@ -255,7 +255,7 @@ const Map = () => {
           </Marker>
         )}
 
-        {pins.map((pin, index) => {
+        {pins?.map((pin, index) => {
           if (activePin?.id !== pin.id && map) {
             const zoom = map.getZoom();
             return (
@@ -333,7 +333,7 @@ const Map = () => {
           </Polyline>
         )}
 
-        {trails.map((trail) => {
+        {trails?.map((trail) => {
           if (activeTrail?.id !== trail.id) {
             return (
               <Polyline
