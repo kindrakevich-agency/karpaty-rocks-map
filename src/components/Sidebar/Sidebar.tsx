@@ -25,7 +25,7 @@ export const Sidebar = () => {
 
         <Separator />
       </div>
-      {pins.length || trails.length ? (
+      {pins?.length || trails?.length ? (
         <>
           <div className="flex-1 overflow-y-auto py-8">
             <List />
