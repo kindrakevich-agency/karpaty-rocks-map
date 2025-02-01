@@ -164,7 +164,7 @@ export const List = () => {
             Навколо:
           </p>
         )}
-        {trails.map((trail) => (
+        {trails?.map((trail) => (
           <>
             {activeTrail?.id !== trail.id && (
               <div
@@ -187,7 +187,7 @@ export const List = () => {
             )}
           </>
         ))}
-        {pins.map((pin) => (
+        {pins?.map((pin) => (
           <>
             {activePin?.id !== pin.id && (
               <div
