@@ -26,11 +26,9 @@ export const Sidebar = () => {
         <Separator />
       </div>
       {pins?.length || trails?.length ? (
-        <>
-          <div className="flex-1 overflow-y-auto py-8">
-            <List />
-          </div>
-        </>
+        <div className="flex-1 overflow-y-auto py-8">
+          <List />
+        </div>
       ) : (
         <div className="flex-1 flex items-center justify-center">
           <p>Результати відсутні.</p>

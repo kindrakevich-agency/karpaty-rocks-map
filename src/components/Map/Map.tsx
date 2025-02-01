@@ -79,6 +79,7 @@ const Map = () => {
   const pins = usePinStore((state) => state.pins);
   const trails = usePinStore((state) => state.trails);
   const updatePins = usePinStore((state) => state.updatePins);
+  const selectedFilter = usePinStore((state) => state.selectedFilter);
 
   const pointMarker = useMapStore((state) => state.pointMarker);
   const setPointMarker = useMapStore((state) => state.setPointMarker);
@@ -125,13 +126,13 @@ const Map = () => {
 
   useEffect(() => {
     if (!map) return;
-    updatePins(map.getBounds());
+    updatePins(map.getBounds(), selectedFilter);
   }, [map, updatePins]);
 
   const Events = () => {
     const map = useMapEvents({
       moveend() {
-        updatePins(map.getBounds());
+        updatePins(map.getBounds(), selectedFilter);
       },
       zoomend() {},
       zoomstart() {},
