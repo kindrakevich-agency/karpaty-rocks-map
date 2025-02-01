@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: 'Карта Українських Карпат',
   description: 'Путівник Українськими Карпатами. Карта, маршрути, проживання, музеї, водоспади, річки, озера.',
   icons: {
-    icon: '/icon.png'
+    icon: `${process.env.NEXT_PUBLIC_FOLDER}icon.png`
   }
 };
 
