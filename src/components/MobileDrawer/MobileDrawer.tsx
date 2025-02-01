@@ -23,8 +23,8 @@ export const MobileDrawer = () => {
   return (
     <Drawer
       open={isMobile}
-      snapPoints={(pins.length || activeTrail) && location ? ['40px', '105px', '205px', 1] : ['40px']}
-      activeSnapPoint={(pins.length || activeTrail) && location ? drawerSnapPoint : '40px'}
+      snapPoints={(pins?.length || activeTrail) && location ? ['40px', '105px', '205px', 1] : ['40px']}
+      activeSnapPoint={(pins?.length || activeTrail) && location ? drawerSnapPoint : '40px'}
       setActiveSnapPoint={(point) => setDrawerSnapPoint(point as DrawerSnapPoint)}
       dismissible={false}
       modal={false}
