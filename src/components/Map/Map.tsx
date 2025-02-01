@@ -1,5 +1,6 @@
 'use client';
 
+import { useMobile } from '@/hooks/useMobile';
 import { usePinStore } from '@/stores/pins';
 import { useMapStore } from '@/stores/map';
 import L from 'leaflet';
@@ -56,6 +57,19 @@ const getItemIcon = (pin: Pin, active: boolean) => {
   }
 };
 
+const checkZoom = (zoom: number, index: number) => {
+  if (zoom < 16 && index % 2) {
+    return false;
+  }
+  if (zoom < 15 && index % 3) {
+    return false;
+  }
+  if (zoom < 14 && index % 5) {
+    return false;
+  }
+  return true;
+};
+
 const Map = () => {
   const { theme } = useTheme();
   const map = useMapStore((state) => state.map);
@@ -79,6 +93,8 @@ const Map = () => {
   const setActiveTrail = usePinStore((state) => state.setActiveTrail);
   const removeActivePin = usePinStore((state) => state.removeActivePin);
   const removeActiveTrail = usePinStore((state) => state.removeActiveTrail);
+
+  const isMobile = useMobile();
 
   useEffect(() => {
     if (map && pointMarker && activePin) {
@@ -127,9 +143,7 @@ const Map = () => {
       locationerror(e) {
         alert(e.message);
       },
-      popupclose(e) {
-        //setActivePin(null);
-      },
+      popupclose(e) {},
       popupopen(e) {}
     });
 
@@ -199,34 +213,37 @@ const Map = () => {
                 {activePin.price}
               </Tooltip>
             )}
-            <Popup className="flex text-center">
-              <p className="absolute m-0 top-2 left-2 rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                {activePin.category}
-              </p>
-              {activePin.image && (
-                <Image
-                  src={activePin.image}
-                  width={200}
-                  height={200}
-                  alt={activePin.name}
-                  className="object-cover h-48 w-96"
-                />
-              )}
-              <div className="m-4">
-                <p className="text-base">{activePin.name}</p>
-                <p className="text-xs">{activePin.location.street}</p>
-                <Button className="mt-2" size="sm" variant="secondary">
-                  <a className="text-white" href={activePin.url} target="_blank" rel="noopener noreferrer">
-                    Докладніше
-                  </a>
-                </Button>
-              </div>
-            </Popup>
+            {!isMobile && (
+              <Popup className="flex text-center">
+                <p className="absolute m-0 top-2 left-2 rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                  {activePin.category}
+                </p>
+                {activePin.image && (
+                  <Image
+                    src={activePin.image}
+                    width={200}
+                    height={200}
+                    alt={activePin.name}
+                    className="object-cover h-48 w-96"
+                  />
+                )}
+                <div className="m-4">
+                  <p className="text-base">{activePin.name}</p>
+                  <p className="text-xs">{activePin.location.street}</p>
+                  <Button className="mt-2" size="sm" variant="secondary">
+                    <a className="text-white" href={activePin.url} target="_blank" rel="noopener noreferrer">
+                      Докладніше
+                    </a>
+                  </Button>
+                </div>
+              </Popup>
+            )}
           </Marker>
         )}
 
-        {pins.map((pin) => {
-          if (activePin?.id !== pin.id) {
+        {pins.map((pin, index) => {
+          if (activePin?.id !== pin.id && map) {
+            const zoom = map.getZoom();
             return (
               <Marker
                 key={pin.id}
@@ -240,7 +257,7 @@ const Map = () => {
                   }
                 }}
               >
-                {pin.price && (
+                {pin.price && checkZoom(zoom, index) && (
                   <Tooltip offset={[0, -10]} direction={'top'} opacity={0.8} permanent={true}>
                     {pin.price}
                   </Tooltip>

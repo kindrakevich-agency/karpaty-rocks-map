@@ -17,6 +17,8 @@ export const MobileDrawer = () => {
   );
   const isMobile = useMobile();
 
+  const activePin = usePinStore((state) => state.activePin);
+
   return (
     <Drawer
       open={isMobile}
@@ -29,16 +31,34 @@ export const MobileDrawer = () => {
       <DrawerContent>
         <DrawerHeader className="flex items-center justify-between mb-1.5">
           <div className="flex flex-col space-y-2">
-            {location?.title && (
-              <div className="mr-auto !py-0">
-                <p className="text-base font-semibold leading-none text-left xl:text-2xl">{location?.title}</p>
-              </div>
-            )}
-            {location?.subtitle && (
-              <div className="mr-auto !py-0">
-                <p className="text-sm text-left">{location?.subtitle}</p>
-              </div>
-            )}
+            <>
+              {activePin && (
+                <>
+                  <div className="mr-auto !py-0">
+                    <p className="line-clamp-1 text-left text-2xl">{activePin.name}</p>
+                  </div>
+                  <div className="mr-auto !py-0">
+                    <p className="text-sm text-left">
+                      {activePin.subcategory}, {activePin.location.street}
+                    </p>
+                  </div>
+                </>
+              )}
+              {!activePin && (
+                <>
+                  {location?.title && (
+                    <div className="mr-auto !py-0">
+                      <p className="line-clamp-1 text-left text-2xl">{location?.title}</p>
+                    </div>
+                  )}
+                  {location?.subtitle && (
+                    <div className="mr-auto !py-0">
+                      <p className="line-clamp-1 text-sm text-left">{location?.subtitle}</p>
+                    </div>
+                  )}
+                </>
+              )}
+            </>
           </div>
         </DrawerHeader>
 

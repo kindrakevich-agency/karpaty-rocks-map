@@ -1,3 +1,4 @@
+import { useMobile } from '@/hooks/useMobile';
 import { Pin, Trail } from '@/api/data';
 import { usePinStore } from '@/stores/pins';
 import { DrawerSnapPoint, useMapStore } from '@/stores/map';
@@ -19,6 +20,8 @@ export const List = () => {
   const { drawerSnapPoint, setDrawerSnapPoint } = useMapStore(
     useShallow((state) => ({ drawerSnapPoint: state.drawerSnapPoint, setDrawerSnapPoint: state.setDrawerSnapPoint }))
   );
+
+  const isMobile = useMobile();
 
   const snapPoint = () => {
     let point = '40px';
@@ -46,7 +49,7 @@ export const List = () => {
   return (
     <>
       {activePin && (
-        <div className="relative grid gap-10 rounded-t-2xl bg-white p-6 pt-0 ring ring-gray-950/5 @min-[theme(--breakpoint-lg)]:grid-cols-2 @min-[theme(--breakpoint-lg)]:px-20 @min-[theme(--breakpoint-lg)]:py-8 @min-[theme(--breakpoint-lg)]:pb-10 dark:bg-gray-950">
+        <div className="relative grid gap-10 bg-white p-4 pt-0 dark:bg-gray-950">
           <div className="flex flex-1 flex-col">
             <div className="relative mb-4 overflow-hidden rounded-sm">
               {activePin.image && (
@@ -59,13 +62,17 @@ export const List = () => {
                 />
               )}
             </div>
-            <span className="font-medium text-gray-500 dark:text-gray-500">{activePin.subcategory}</span>
+            {!isMobile && <span className="font-medium text-gray-500 dark:text-gray-500">{activePin.subcategory}</span>}
             <div className="grid grid-cols-1 gap-2">
               <div>
-                <span className="mt-2 text-2xl font-semibold text-gray-950 dark:text-white">{activePin.name}</span>
-                <span className="flex">
-                  <span className="text-sm/6 text-gray-500">{activePin.location.street}</span>
-                </span>
+                {!isMobile && (
+                  <>
+                    <span className="mt-2 text-2xl font-semibold text-gray-950 dark:text-white">{activePin.name}</span>
+                    <span className="flex">
+                      <span className="text-gray-500">{activePin.location.street}</span>
+                    </span>
+                  </>
+                )}
               </div>
               {activePin.price && (
                 <div className="mb-3">
@@ -86,23 +93,24 @@ export const List = () => {
               )}
             </div>
             <div>
-              {activePin.body && <p className="mt-1 text-sm/6 text-gray-600 dark:text-white">{activePin.body}</p>}
-              <a
-                href={activePin.url}
-                target="_blank"
-                className="mt-3 inline-block shrink-0 text-sm/6 font-semibold text-blue-600 dark:text-blue-500"
-              >
-                Читати повністю
-              </a>
+              {activePin.body && (
+                <p className="mt-1 text-sm/6 text-gray-600 dark:text-white">
+                  {activePin.body}
+                  <a href={activePin.url} target="_blank" className="pl-1 text-blue-600 dark:text-blue-500">
+                    Читати повністю
+                  </a>
+                </p>
+              )}
             </div>
           </div>
         </div>
       )}
-      <div className="space-y-10">
+      <div className="space-y-7">
+        {activePin && <p className="pl-4 text-left text-2xl">Навколо:</p>}
         {trails.map((trail) => (
           <div
             key={trail.id}
-            className="flex flex-row items-start border-l-[6px] pl-6 mx-4 xl:mx-8 cursor-pointer relative"
+            className="flex flex-row items-start border-l-[6px] pl-6 mx-4 cursor-pointer relative"
             style={{ borderColor: RED }}
             onClick={() => onClickTrail(trail)}
           >
@@ -119,7 +127,7 @@ export const List = () => {
         {pins.map((pin) => (
           <div
             key={pin.id}
-            className="flex flex-row items-start border-l-[6px] pl-6 mx-4 xl:mx-8 cursor-pointer relative"
+            className="flex flex-row items-start border-l-[6px] pl-6 mx-4 cursor-pointer relative"
             style={{ borderColor: getItemColor(pin) }}
             onClick={() => onClickPin(pin)}
           >
