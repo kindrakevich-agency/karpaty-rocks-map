@@ -49,14 +49,14 @@ export const usePinStore = create<PinState>((set, get) => ({
   },
   searchResults: [],
   setSearchResults: async (query: string) => {
-    const result = await fetch(`/api/search?value=${query}`);
+    const result = await fetch(`${process.env.NEXT_PUBLIC_FOLDER}api/search?value=${query}`);
     const searchResults = await result.json();
     set({ searchResults });
   },
   trails: [],
   updatePins: async (bounds: LatLngBounds, filter?: string) => {
     const result = await fetch(
-      `/api/bounds?NorthEast_lat=${bounds.getNorthEast().lat}&NorthEast_lon=${bounds.getNorthEast().lng}&SouthWest_lat=${bounds.getSouthWest().lat}&SouthWest_lon=${bounds.getSouthWest().lng}&filter=${filter}`
+      `${process.env.NEXT_PUBLIC_FOLDER}api/bounds?NorthEast_lat=${bounds.getNorthEast().lat}&NorthEast_lon=${bounds.getNorthEast().lng}&SouthWest_lat=${bounds.getSouthWest().lat}&SouthWest_lon=${bounds.getSouthWest().lng}&filter=${filter}`
     );
     const data = await result.json();
     const trails = data.trails;
