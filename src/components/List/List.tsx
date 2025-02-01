@@ -179,7 +179,7 @@ export const List = () => {
                 <div>
                   <p className="m-0 leading-1">{trail.name}</p>
                   {trail.trail_max_elevation && (
-                    <p className="text-xs">Максимальна висота: {trail.trail_max_elevation}м</p>
+                    <p className="text-sm">Максимальна висота: {trail.trail_max_elevation}м</p>
                   )}
                   {trail.trail_length && <p className="text-sm">Довжина: {getTrailLength(trail.trail_length)}км</p>}
                 </div>
@@ -201,8 +201,12 @@ export const List = () => {
                 )}
                 <div className="space-y-1.5">
                   <p className="m-0">{pin.name}</p>
-                  <p className="text-xs">{pin.location.street}</p>
-                  {pin.pricetext && <p className="text-sm">{pin.pricetext}</p>}
+                  {pin.price && (
+                    <p className="text-sm">
+                      {pin.pricetext} {pin.price}
+                    </p>
+                  )}
+                  <p className="text-sm text-gray-500">{pin.location.street}</p>
                 </div>
               </div>
             )}
