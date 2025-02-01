@@ -194,6 +194,10 @@ const Map = () => {
   //const LATLNG = [48.470791, 24.579491]; // Yaremche
   const DEFAULT_MAP_CENTER: LatLngTuple = [48.2929828, 24.5635786];
 
+  const canvasRenderer = L.canvas({
+    tolerance: 5
+  });
+
   return (
     <div className="h-full w-full relative">
       <MapContainer
@@ -204,6 +208,8 @@ const Map = () => {
         className="h-full w-full !bg-background"
         zoomControl={false}
         style={{ zIndex: 40 }}
+        preferCanvas={true}
+        renderer={canvasRenderer}
       >
         <TileLayer
           attribution={currentTile?.attribution}
@@ -309,12 +315,12 @@ const Map = () => {
                   className="object-cover h-48 w-96"
                 />
                 <div className="m-4">
-                  <p className="text-base">{activeTrail.name}</p>
-                  {activeTrail.trail_max_elevation && (
-                    <p className="text-xs">Максимальна висота: {activeTrail.trail_max_elevation}м</p>
-                  )}
+                  <p className="text-base leading-1 mb-2">{activeTrail.name}</p>
                   {activeTrail.trail_length && (
                     <p className="text-xs">Довжина: {getTrailLength(activeTrail.trail_length)}км</p>
+                  )}
+                  {activeTrail.trail_max_elevation && (
+                    <p className="text-xs">Максимальна висота: {activeTrail.trail_max_elevation}м</p>
                   )}
                   <Button className="mt-2" size="sm" variant="secondary">
                     <a className="text-white" href={activeTrail.url} target="_blank" rel="noopener noreferrer">

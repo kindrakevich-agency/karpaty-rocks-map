@@ -1,15 +1,19 @@
 import { usePinStore } from '@/stores/pins';
-
+import { useMapStore } from '@/stores//map';
 import { Filters } from './Filters';
 import { LocateControl } from './LocateControl';
 import { ThemeToggle } from './ThemeToggle';
 import { ZoomControl } from './ZoomControl';
 import { Button } from '@/components/ui/button';
+import { useShallow } from 'zustand/react/shallow';
 
 export const Controls = () => {
   const pins = usePinStore((state) => state.pins);
   const location = usePinStore((state) => state.location);
   const setSearchOpen = usePinStore((state) => state.setSearchOpen);
+  const { drawerSnapPoint, setDrawerSnapPoint } = useMapStore(
+    useShallow((state) => ({ drawerSnapPoint: state.drawerSnapPoint, setDrawerSnapPoint: state.setDrawerSnapPoint }))
+  );
 
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 m-4 lg:m-6 pointer-events-none" style={{ zIndex: 9999 }}>
@@ -27,7 +31,14 @@ export const Controls = () => {
           )}
         </div>
         <div className="flex space-x-3 xl:space-x-4">
-          <Button variant="outline" className="pointer-events-auto text-sm" onClick={() => setSearchOpen(true)}>
+          <Button
+            variant="outline"
+            className="pointer-events-auto text-sm"
+            onClick={() => {
+              setDrawerSnapPoint('40px');
+              setSearchOpen(true);
+            }}
+          >
             Пошук
           </Button>
           <Filters />

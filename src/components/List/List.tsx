@@ -200,7 +200,7 @@ export const List = () => {
                   <Image src={pin.image} width={80} height={80} alt={pin.name} className="mr-4 rounded-in-list" />
                 )}
                 <div className="space-y-1.5">
-                  <p className="m-0">{pin.name}</p>
+                  <p className="m-0 leading-1">{pin.name}</p>
                   {pin.price && (
                     <p className="text-sm">
                       {pin.pricetext} {pin.price}
