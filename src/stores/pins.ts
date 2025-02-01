@@ -2,6 +2,7 @@ import { Pin, Filter, Trail, Location, Search } from '@/api/data';
 import { LatLngBounds } from 'leaflet';
 import { create } from 'zustand';
 import { useMapStore } from './map';
+import { initSearch } from '@/components/Map/constants';
 
 interface PinState {
   filters: Filter[];
@@ -86,12 +87,20 @@ const initStore = async () => {
       filter: 'Маршрути'
     }
   ];
+  const searchResults = initSearch;
 
   return {
-    filters
+    filters,
+    searchResults
   };
 };
 
 initStore()
-  .then((values) => usePinStore.setState({ filters: values.filters, selectedFilter: values.filters[0].filter }))
+  .then((values) =>
+    usePinStore.setState({
+      filters: values.filters,
+      selectedFilter: values.filters[0].filter,
+      searchResults: values.searchResults
+    })
+  )
   .catch((err) => console.error(err));

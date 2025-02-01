@@ -50,9 +50,9 @@ export const SearchBox = () => {
           {!matchEntries.length && <div className="no-results text-center p-3">Результати відсутні</div>}
           {matchEntries.map(([group, items]) => (
             <div key={group} className="group">
-              <div className="group-label">{getCategoryName(group)}</div>
               {group == 'trails' && (
                 <>
+                  {items?.length !== 0 && <div className="group-label">{getCategoryName(group)}</div>}
                   {(items as Trail[]).map((item) => (
                     <div
                       className="list-item"
@@ -79,6 +79,7 @@ export const SearchBox = () => {
               )}
               {group != 'trails' && (
                 <>
+                  {items?.length !== 0 && <div className="group-label">{getCategoryName(group)}</div>}
                   {(items as Pin[]).map((item) => (
                     <div
                       className="list-item"

@@ -43,8 +43,10 @@ export type Place = {
   id: number;
   name: string;
   category: string;
-  latitude: string;
-  longitude: string;
+  location: {
+    latitude: string;
+    longitude: string;
+  };
 };
 
 export type Search = {
