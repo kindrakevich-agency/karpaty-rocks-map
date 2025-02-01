@@ -31,3 +31,6 @@ $ yarn install
 ```bash
 $ yarn dev
 ```
+
+## Screenshot
+![screenshot](public/map-desktop.png)
