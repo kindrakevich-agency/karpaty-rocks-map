@@ -18,12 +18,13 @@ export const MobileDrawer = () => {
   const isMobile = useMobile();
 
   const activePin = usePinStore((state) => state.activePin);
+  const activeTrail = usePinStore((state) => state.activeTrail);
 
   return (
     <Drawer
       open={isMobile}
-      snapPoints={pins.length && location ? ['40px', '105px', '205px', 1] : ['40px']}
-      activeSnapPoint={pins.length && location ? drawerSnapPoint : '40px'}
+      snapPoints={(pins.length || activeTrail) && location ? ['40px', '105px', '205px', 1] : ['40px']}
+      activeSnapPoint={(pins.length || activeTrail) && location ? drawerSnapPoint : '40px'}
       setActiveSnapPoint={(point) => setDrawerSnapPoint(point as DrawerSnapPoint)}
       dismissible={false}
       modal={false}
@@ -35,7 +36,7 @@ export const MobileDrawer = () => {
               {activePin && (
                 <>
                   <div className="mr-auto !py-0">
-                    <p className="line-clamp-1 text-left text-2xl">{activePin.name}</p>
+                    <p className="text-left text-2xl">{activePin.name}</p>
                   </div>
                   <div className="mr-auto !py-0">
                     <p className="text-sm text-left">
@@ -44,7 +45,12 @@ export const MobileDrawer = () => {
                   </div>
                 </>
               )}
-              {!activePin && (
+              {activeTrail && (
+                <div className="mr-auto !py-0">
+                  <p className="text-left text-2xl">{activeTrail.name}</p>
+                </div>
+              )}
+              {!activePin && !activeTrail && (
                 <>
                   {location?.title && (
                     <div className="mr-auto !py-0">

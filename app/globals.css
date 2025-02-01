@@ -137,3 +137,6 @@ html.dark .leaflet-tile {
     opacity: 0;
   }
 }
+.leaflet-pane > svg path.leaflet-interactive {
+  outline: none !important;
+}

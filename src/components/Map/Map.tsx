@@ -27,6 +27,7 @@ import { Button } from '@/components/ui/button';
 import { MAX_ZOOM } from './constants';
 import { Pin, Trail } from '@/api/data';
 import { useShallow } from 'zustand/react/shallow';
+import { getTrailLength } from '@/utils/helpers';
 
 const getItemIcon = (pin: Pin, active: boolean) => {
   let className = '';
@@ -292,8 +293,8 @@ const Map = () => {
               </p>
               <Image
                 src={activeTrail.image}
-                width={250}
-                height={250}
+                width={200}
+                height={200}
                 alt={activeTrail.name}
                 className="object-cover h-48 w-96"
               />
@@ -302,7 +303,9 @@ const Map = () => {
                 {activeTrail.trail_max_elevation && (
                   <p className="text-xs">Максимальна висота: {activeTrail.trail_max_elevation}м</p>
                 )}
-                {activeTrail.trail_length && <p className="text-sm">Довжина: {activeTrail.trail_length}м</p>}
+                {activeTrail.trail_length && (
+                  <p className="text-xs">Довжина: {getTrailLength(activeTrail.trail_length)}км</p>
+                )}
                 <Button className="mt-2" size="sm" variant="secondary">
                   <a className="text-white" href={activeTrail.url} target="_blank" rel="noopener noreferrer">
                     Докладніше
