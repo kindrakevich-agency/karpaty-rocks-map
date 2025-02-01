@@ -161,11 +161,18 @@ const Map = () => {
     color: '#FFFFFF'
   };
 
-  const getPathOptions = (trail: Trail) => {
+  const getPathOptions = (trail: Trail, active: boolean) => {
     let pathOptions = {
       weight: 3,
       color: RED
     };
+    if (active) {
+      pathOptions = {
+        weight: 8,
+        color: RED
+      };
+      return pathOptions;
+    }
     if (trail.trail_color == '#0000FF') {
       pathOptions.color = BLUE;
     }
@@ -272,7 +279,7 @@ const Map = () => {
           <Polyline
             ref={(p) => setTrailMarker(p as LPolyline)}
             key={activeTrail.id}
-            pathOptions={getPathOptions(activeTrail)}
+            pathOptions={getPathOptions(activeTrail, true)}
             positions={activeTrail.location}
             eventHandlers={{
               mouseover: (e) => {
@@ -281,38 +288,42 @@ const Map = () => {
               },
               mouseout: (e) => {
                 var layer = e.target;
-                const pathOptions = getPathOptions(activeTrail);
+                const pathOptions = getPathOptions(activeTrail, true);
                 layer.setStyle(pathOptions);
               }
             }}
           >
-            <Tooltip sticky>{activeTrail.name}</Tooltip>
-            <Popup className="flex text-center">
-              <p className="absolute m-0 top-2 left-2 rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
-                {activeTrail.category}
-              </p>
-              <Image
-                src={activeTrail.image}
-                width={200}
-                height={200}
-                alt={activeTrail.name}
-                className="object-cover h-48 w-96"
-              />
-              <div className="m-4">
-                <p className="text-base">{activeTrail.name}</p>
-                {activeTrail.trail_max_elevation && (
-                  <p className="text-xs">Максимальна висота: {activeTrail.trail_max_elevation}м</p>
-                )}
-                {activeTrail.trail_length && (
-                  <p className="text-xs">Довжина: {getTrailLength(activeTrail.trail_length)}км</p>
-                )}
-                <Button className="mt-2" size="sm" variant="secondary">
-                  <a className="text-white" href={activeTrail.url} target="_blank" rel="noopener noreferrer">
-                    Докладніше
-                  </a>
-                </Button>
-              </div>
-            </Popup>
+            <Tooltip sticky permanent={isMobile}>
+              {activeTrail.name}
+            </Tooltip>
+            {!isMobile && (
+              <Popup className="flex text-center">
+                <p className="absolute m-0 top-2 left-2 rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+                  {activeTrail.category}
+                </p>
+                <Image
+                  src={activeTrail.image}
+                  width={200}
+                  height={200}
+                  alt={activeTrail.name}
+                  className="object-cover h-48 w-96"
+                />
+                <div className="m-4">
+                  <p className="text-base">{activeTrail.name}</p>
+                  {activeTrail.trail_max_elevation && (
+                    <p className="text-xs">Максимальна висота: {activeTrail.trail_max_elevation}м</p>
+                  )}
+                  {activeTrail.trail_length && (
+                    <p className="text-xs">Довжина: {getTrailLength(activeTrail.trail_length)}км</p>
+                  )}
+                  <Button className="mt-2" size="sm" variant="secondary">
+                    <a className="text-white" href={activeTrail.url} target="_blank" rel="noopener noreferrer">
+                      Докладніше
+                    </a>
+                  </Button>
+                </div>
+              </Popup>
+            )}
           </Polyline>
         )}
 
@@ -321,7 +332,7 @@ const Map = () => {
             return (
               <Polyline
                 key={trail.id}
-                pathOptions={getPathOptions(trail)}
+                pathOptions={getPathOptions(trail, false)}
                 positions={trail.location}
                 eventHandlers={{
                   mouseover: (e) => {
@@ -330,7 +341,7 @@ const Map = () => {
                   },
                   mouseout: (e) => {
                     var layer = e.target;
-                    const pathOptions = getPathOptions(trail);
+                    const pathOptions = getPathOptions(trail, false);
                     layer.setStyle(pathOptions);
                   },
                   click: (e) => {
