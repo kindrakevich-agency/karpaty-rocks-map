@@ -2,6 +2,7 @@ import { ThemeProvider } from '@/context/Theme';
 import { cn } from '@/utils/cn';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { Toaster } from 'react-hot-toast';
 import './globals.css';
 
 const montserrat = Inter({
@@ -29,6 +30,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
           {children}
         </ThemeProvider>
+        <Toaster position="bottom-right" />
       </body>
     </html>
   );

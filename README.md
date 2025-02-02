@@ -24,8 +24,9 @@ $ yarn install
 ```
 2. Step 2 - Add env variables
    - Create a .env.local file in the root directory
-   - Add ```KARPATY_ACCESS_TOKEN=``` variables
-   - Add ```NEXT_PUBLIC_FOLDER=/``` variables
+   - Add ```KARPATY_ACCESS_TOKEN=``` variable
+   - Add ```MAPBOX_ACCESS_TOKEN=``` variable
+   - Add ```NEXT_PUBLIC_FOLDER=/``` variable
 
 1. Step 3 - Run development server
 ```bash

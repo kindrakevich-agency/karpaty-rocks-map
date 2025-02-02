@@ -1,4 +1,8 @@
-import { LatLngBoundsLiteral } from 'leaflet';
+import { LatLng, LatLngBoundsLiteral } from 'leaflet';
+
+export type RouteStart = LatLng | null;
+export type RouteEnd = LatLng | null;
+export type Route = [number, number][];
 
 export type Filter = {
   filter: string;

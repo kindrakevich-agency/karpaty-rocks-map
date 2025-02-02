@@ -140,3 +140,6 @@ html.dark .leaflet-tile {
 .leaflet-pane > svg path.leaflet-interactive {
   outline: none !important;
 }
+.map-crosshair .map-container {
+  cursor: crosshair !important;
+}

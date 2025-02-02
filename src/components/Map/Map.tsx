@@ -29,6 +29,18 @@ import { Pin, Trail } from '@/api/data';
 import { useShallow } from 'zustand/react/shallow';
 import { getTrailLength } from '@/utils/helpers';
 
+const startIcon = L.divIcon({
+  className: '',
+  html: `<div class="w-full h-full flex items-center justify-center flex-col"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${RED}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flag"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>СТАРТ</div>`,
+  iconSize: [42, 42]
+});
+
+const endIcon = L.divIcon({
+  className: '',
+  html: `<div class="w-full h-full flex items-center justify-center flex-col"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${BLUE}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flag"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>ФІНІШ</div>`,
+  iconSize: [42, 42]
+});
+
 const getItemIcon = (pin: Pin, active: boolean) => {
   let className = '';
   if (active) {
@@ -88,6 +100,15 @@ const Map = () => {
   const { drawerSnapPoint, setDrawerSnapPoint } = useMapStore(
     useShallow((state) => ({ drawerSnapPoint: state.drawerSnapPoint, setDrawerSnapPoint: state.setDrawerSnapPoint }))
   );
+  const setDrawRoute = useMapStore((state) => state.setDrawRoute);
+  const drawRoute = useMapStore((state) => state.drawRoute);
+  const setRouteStart = useMapStore((state) => state.setRouteStart);
+  const routeStart = useMapStore((state) => state.routeStart);
+  const setRouteEnd = useMapStore((state) => state.setRouteEnd);
+  const routeEnd = useMapStore((state) => state.routeEnd);
+
+  const setRoute = useMapStore((state) => state.setRoute);
+  const route = useMapStore((state) => state.route);
 
   const activePin = usePinStore((state) => state.activePin);
   const setActivePin = usePinStore((state) => state.setActivePin);
@@ -127,10 +148,21 @@ const Map = () => {
   useEffect(() => {
     if (!map) return;
     updatePins(map.getBounds(), selectedFilter);
-  }, [map, updatePins]);
+  }, [map, updatePins, selectedFilter]);
 
   const Events = () => {
     const map = useMapEvents({
+      click(e) {
+        if (drawRoute) {
+          if (!routeStart) {
+            setRouteStart(e.latlng);
+          } else if (!routeEnd) {
+            setRouteEnd(e.latlng);
+            setDrawRoute(false);
+            setRoute(routeStart, e.latlng);
+          }
+        }
+      },
       moveend() {
         updatePins(map.getBounds(), selectedFilter);
       },
@@ -154,6 +186,11 @@ const Map = () => {
 
   const pathOptions = {
     weight: 3,
+    color: RED
+  };
+
+  const pathOptionsRoute = {
+    weight: 7,
     color: RED
   };
 
@@ -192,7 +229,6 @@ const Map = () => {
     return pathOptions;
   };
 
-  //const LATLNG = [48.470791, 24.579491]; // Yaremche
   const DEFAULT_MAP_CENTER: LatLngTuple = [48.2929828, 24.5635786];
 
   const canvasRenderer = L.canvas({
@@ -200,13 +236,13 @@ const Map = () => {
   });
 
   return (
-    <div className="h-full w-full relative">
+    <div className={`${drawRoute ? 'map-crosshair' : 'map-base'} h-full w-full relative`}>
       <MapContainer
         ref={(m) => setMap(m as LMap)}
         center={DEFAULT_MAP_CENTER}
         minZoom={MIN_PIN_ZOOM}
         zoom={DEFAULT_ZOOM}
-        className="h-full w-full !bg-background"
+        className="h-full w-full !bg-background map-container"
         zoomControl={false}
         style={{ zIndex: 40 }}
         preferCanvas={true}
@@ -216,6 +252,10 @@ const Map = () => {
           attribution={currentTile?.attribution}
           url={currentTile?.url || 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}
         />
+
+        {routeStart && <Marker position={routeStart} icon={startIcon} />}
+        {routeEnd && <Marker position={routeEnd} icon={endIcon} />}
+        {route && <Polyline pathOptions={pathOptionsRoute} positions={route} />}
 
         {activePin && (
           <Marker
