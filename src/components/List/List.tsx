@@ -160,6 +160,7 @@ export const List = () => {
                     width={300}
                     height={200}
                     alt={activeTrail.name}
+                    loading="eager"
                     className="w-full object-cover"
                   />
                 </div>
