@@ -41,6 +41,7 @@ export interface Trail {
   trail_max_elevation: number;
   trail_min_elevation: number;
   height: number | null;
+  elevation_svg: string | null;
 }
 
 export type Place = {

@@ -28,6 +28,7 @@ import { MAX_ZOOM } from './constants';
 import { Pin, Trail } from '@/api/data';
 import { useShallow } from 'zustand/react/shallow';
 import { getTrailLength } from '@/utils/helpers';
+import { useSearchParams } from 'next/navigation';
 
 const startIcon = L.divIcon({
   className: '',
@@ -84,8 +85,22 @@ const checkZoom = (zoom: number, index: number) => {
 };
 
 const Map = () => {
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
+  const searchParams = useSearchParams();
+  const initialTheme = searchParams.get('theme');
+  const initialLat = searchParams.get('lat');
+  const initialLon = searchParams.get('lon');
+  const initialId = searchParams.get('id');
+  const setEmbed = useMapStore((state) => state.setEmbed);
+  if (initialTheme == 'light') {
+    setTheme('light');
+    setEmbed(true);
+  }
+
   const map = useMapStore((state) => state.map);
+  const { drawerSnapPoint, setDrawerSnapPoint } = useMapStore(
+    useShallow((state) => ({ drawerSnapPoint: state.drawerSnapPoint, setDrawerSnapPoint: state.setDrawerSnapPoint }))
+  );
   const currentTile = useMapStore((state) => state.tile);
   const setMap = useMapStore((state) => state.setMap);
   const pins = usePinStore((state) => state.pins);
@@ -97,9 +112,6 @@ const Map = () => {
   const setPointMarker = useMapStore((state) => state.setPointMarker);
   const trailMarker = useMapStore((state) => state.trailMarker);
   const setTrailMarker = useMapStore((state) => state.setTrailMarker);
-  const { drawerSnapPoint, setDrawerSnapPoint } = useMapStore(
-    useShallow((state) => ({ drawerSnapPoint: state.drawerSnapPoint, setDrawerSnapPoint: state.setDrawerSnapPoint }))
-  );
   const setDrawRoute = useMapStore((state) => state.setDrawRoute);
   const drawRoute = useMapStore((state) => state.drawRoute);
   const setRouteStart = useMapStore((state) => state.setRouteStart);
@@ -110,7 +122,7 @@ const Map = () => {
   const setRoute = useMapStore((state) => state.setRoute);
   const route = useMapStore((state) => state.route);
 
-  const activePin = usePinStore((state) => state.activePin);
+  let activePin = usePinStore((state) => state.activePin);
   const setActivePin = usePinStore((state) => state.setActivePin);
   const activeTrail = usePinStore((state) => state.activeTrail);
   const setActiveTrail = usePinStore((state) => state.setActiveTrail);
@@ -229,7 +241,17 @@ const Map = () => {
     return pathOptions;
   };
 
-  const DEFAULT_MAP_CENTER: LatLngTuple = [48.2929828, 24.5635786];
+  let INITIAL_ZOOM = DEFAULT_ZOOM;
+  let DEFAULT_MAP_CENTER: LatLngTuple = [48.2929828, 24.5635786];
+  if (initialLat && initialLon) {
+    DEFAULT_MAP_CENTER = [parseFloat(initialLat), parseFloat(initialLon)];
+    INITIAL_ZOOM = MAX_ZOOM;
+    if (initialId) {
+      const initialPin = pins.filter((pin) => pin.id === parseInt(initialId));
+      activePin = initialPin[0];
+      //setActivePin(activePin);
+    }
+  }
 
   const canvasRenderer = L.canvas({
     tolerance: 5
@@ -241,7 +263,7 @@ const Map = () => {
         ref={(m) => setMap(m as LMap)}
         center={DEFAULT_MAP_CENTER}
         minZoom={MIN_PIN_ZOOM}
-        zoom={DEFAULT_ZOOM}
+        zoom={INITIAL_ZOOM}
         className="h-full w-full !bg-background map-container"
         zoomControl={false}
         style={{ zIndex: 40 }}
@@ -285,11 +307,13 @@ const Map = () => {
                 <div className="m-4">
                   <p className="text-base">{activePin.name}</p>
                   <p className="text-xs">{activePin.location.street}</p>
-                  <Button className="mt-2" size="sm" variant="secondary">
-                    <a className="text-white" href={activePin.url} target="_blank" rel="noopener noreferrer">
-                      Докладніше
-                    </a>
-                  </Button>
+                  {initialId === null && (
+                    <Button className="mt-2" size="sm" variant="secondary">
+                      <a className="text-white" href={activePin.url} target="_blank" rel="noopener noreferrer">
+                        Докладніше
+                      </a>
+                    </Button>
+                  )}
                 </div>
               </Popup>
             )}

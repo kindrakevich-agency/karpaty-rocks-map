@@ -24,6 +24,8 @@ interface MapState {
   setRouteEnd: (routeEnd: RouteEnd) => void;
   route: Route;
   setRoute: (routeStart: RouteStart, routeEnd: RouteEnd) => void;
+  embed: boolean;
+  setEmbed: (embed: boolean) => void;
 }
 
 export const useMapStore = create<MapState>((set) => ({
@@ -62,6 +64,10 @@ export const useMapStore = create<MapState>((set) => ({
       });
       set({ route });
     }
+  },
+  embed: false,
+  setEmbed: (embed: boolean) => {
+    set({ embed: embed });
   }
 }));
 

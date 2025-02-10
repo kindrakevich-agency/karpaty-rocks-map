@@ -49,6 +49,12 @@ export const List = () => {
     setDrawerSnapPoint(snapPoint());
   };
 
+  const svgConvert = (svgString: string) => {
+    const base64Svg = btoa(svgString);
+    const dataUrl = `data:image/svg+xml;base64,${base64Svg}`;
+    return dataUrl;
+  };
+
   return (
     <>
       {activePin && (
@@ -147,10 +153,21 @@ export const List = () => {
                   <span className="text-primary-600">{activeTrail.trail_descent}м</span>
                 </div>
               </div>
+              {activeTrail.elevation_svg && (
+                <div className="relative mb-4 overflow-hidden">
+                  <Image
+                    src={svgConvert(activeTrail.elevation_svg)}
+                    width={300}
+                    height={200}
+                    alt={activeTrail.name}
+                    className="w-full object-cover"
+                  />
+                </div>
+              )}
             </div>
             <div>
               <Button className="mt-2" size="sm" variant="secondary">
-                <a href={activeTrail.url} target="_blank" className="pl-1 text-blue-600 dark:text-blue-500">
+                <a href={activeTrail.url} target="_blank" className="pl-1 text-blue-600 dark:text-white">
                   Дослідити маршрут
                 </a>
               </Button>
