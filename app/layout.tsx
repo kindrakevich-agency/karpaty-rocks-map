@@ -13,9 +13,13 @@ const montserrat = Inter({
 
 export const metadata: Metadata = {
   title: 'Карта Українських Карпат',
-  description: 'Путівник Українськими Карпатами. Карта, маршрути, проживання, музеї, водоспади, річки, озера.',
+  description:
+    'Путівник Українськими Карпатами. Карта Карпат, пішохідні маршрути, бронювання проживання, музеї, водоспади, річки, озера. Де варто побувати і що побачити.',
   icons: {
     icon: `${process.env.NEXT_PUBLIC_FOLDER}icon.png`
+  },
+  openGraph: {
+    images: 'https://karpaty.rocks/map.png'
   }
 };
 
