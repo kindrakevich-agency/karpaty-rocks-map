@@ -129,19 +129,24 @@ const Map = () => {
   const removeActivePin = usePinStore((state) => state.removeActivePin);
   const removeActiveTrail = usePinStore((state) => state.removeActiveTrail);
 
+  const setScroll = useMapStore((state) => state.setScroll);
+
   const isMobile = useMobile();
 
   useEffect(() => {
     if (map && pointMarker && activePin) {
+      setScroll(true);
       map.closePopup();
       map.flyTo([Number(activePin.location.latitude), Number(activePin.location.longitude)], MAX_ZOOM, {
         animate: true
       });
       setTimeout(() => {
         pointMarker.openPopup();
+        setScroll(false);
       }, 200);
     }
     if (map && trailMarker && activeTrail) {
+      setScroll(true);
       map?.closePopup();
       const bounds = latLngBounds(
         activeTrail.location.map((c) => {
@@ -151,9 +156,10 @@ const Map = () => {
       map?.flyToBounds(bounds);
       setTimeout(() => {
         trailMarker.openPopup();
+        setScroll(false);
       }, 200);
     }
-  }, [map, pointMarker, trailMarker, activePin, activeTrail]);
+  }, [map, pointMarker, trailMarker, activePin, activeTrail, setScroll]);
 
   const [userLocation, setUserLocation] = useState<{ latlng: LatLng; accuracy: number } | null>();
 

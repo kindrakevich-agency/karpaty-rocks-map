@@ -6,6 +6,7 @@ import { MapTiles } from '@/api/data';
 import toast from 'react-hot-toast';
 import downloadjs from 'downloadjs';
 import { generateGPX } from '@/utils/helpers';
+import { useMobile } from '@/hooks/useMobile';
 
 export const ZoomControl = () => {
   const map = useMapStore((state) => state.map);
@@ -18,6 +19,8 @@ export const ZoomControl = () => {
   const setRoute = useMapStore((state) => state.setRoute);
   const route = useMapStore((state) => state.route);
   const tiles = mapTiles;
+
+  const isMobile = useMobile();
 
   const onClickZoomIn = () => map?.zoomIn();
 
@@ -68,12 +71,16 @@ export const ZoomControl = () => {
 
   return (
     <div className="flex flex-col space-y-3">
-      <Button size="icon" variant="outline" onClick={onClickZoomIn}>
-        <FaPlus className="h-4 w-4" />
-      </Button>
-      <Button size="icon" variant="outline" onClick={onClickZoomOut}>
-        <FaMinus className="h-4 w-4" />
-      </Button>
+      {!isMobile && (
+        <>
+          <Button size="icon" variant="outline" onClick={onClickZoomIn}>
+            <FaPlus className="h-4 w-4" />
+          </Button>
+          <Button size="icon" variant="outline" onClick={onClickZoomOut}>
+            <FaMinus className="h-4 w-4" />
+          </Button>
+        </>
+      )}
       <Button size="icon" variant="outline" onClick={tileSwitch}>
         <FaEarthAmericas className="h-4 w-4" />
       </Button>

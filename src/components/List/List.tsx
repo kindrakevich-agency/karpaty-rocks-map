@@ -8,8 +8,10 @@ import { Button } from '@/components/ui/button';
 import { getItemColor } from '@/utils/helpers';
 import { useShallow } from 'zustand/react/shallow';
 import { getTrailLength } from '@/utils/helpers';
+import { useEffect, useRef } from 'react';
 
 export const List = () => {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
   const pins = usePinStore((state) => state.pins);
   const trails = usePinStore((state) => state.trails);
   const activePin = usePinStore((state) => state.activePin);
@@ -23,6 +25,13 @@ export const List = () => {
   const { drawerSnapPoint, setDrawerSnapPoint } = useMapStore(
     useShallow((state) => ({ drawerSnapPoint: state.drawerSnapPoint, setDrawerSnapPoint: state.setDrawerSnapPoint }))
   );
+
+  const scroll = useMapStore((state) => state.scroll);
+  useEffect(() => {
+    if (scroll && scrollRef.current) {
+      scrollRef.current.scrollTo(0, 0);
+    }
+  }, [scroll]);
 
   const isMobile = useMobile();
 
@@ -39,12 +48,14 @@ export const List = () => {
 
   const onClickPin = (pin: Pin) => {
     removeActiveTrail(null);
+    scrollRef.current?.scrollTo(0, 0);
     setActivePin(pin);
     setDrawerSnapPoint(snapPoint());
   };
 
   const onClickTrail = (trail: Trail) => {
     removeActivePin(null);
+    scrollRef.current?.scrollTo(0, 0);
     setActiveTrail(trail);
     setDrawerSnapPoint(snapPoint());
   };
@@ -56,7 +67,7 @@ export const List = () => {
   };
 
   return (
-    <>
+    <div ref={scrollRef} className="flex-1 overflow-y-auto py-8">
       {activePin && (
         <div key={`activePin`} className="relative grid gap-10 bg-white p-4 pt-0 dark:bg-gray-950">
           <div className="flex flex-1 flex-col">
@@ -231,6 +242,6 @@ export const List = () => {
           </>
         ))}
       </div>
-    </>
+    </div>
   );
 };

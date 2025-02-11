@@ -26,6 +26,8 @@ interface MapState {
   setRoute: (routeStart: RouteStart, routeEnd: RouteEnd) => void;
   embed: boolean;
   setEmbed: (embed: boolean) => void;
+  scroll: boolean;
+  setScroll: (scroll: boolean) => void;
 }
 
 export const useMapStore = create<MapState>((set) => ({
@@ -68,6 +70,10 @@ export const useMapStore = create<MapState>((set) => ({
   embed: false,
   setEmbed: (embed: boolean) => {
     set({ embed: embed });
+  },
+  scroll: false,
+  setScroll: (scroll: boolean) => {
+    set({ scroll: scroll });
   }
 }));
 
